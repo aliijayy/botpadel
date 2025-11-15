@@ -13,7 +13,7 @@ const log = pino({ level: cfg.LOG_LEVEL, transport: { target: 'pino-pretty' } })
 
 export async function runOnce() {
   const when = targetDate();
-  const dateISO = formatISO(when);
+  const dateISO = String(formatISO(when));
   log.info({ dateISO }, 'Target date');
 
   const browser = await chromium.launch({ headless: true });
