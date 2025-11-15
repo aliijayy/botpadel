@@ -1,0 +1,1 @@
+export type Window = { start: string; end: string };
