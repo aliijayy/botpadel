@@ -25,10 +25,22 @@ jobs:
 
       - name: Run padel auto-booker
         env:
-          EMAIL: ${{ secrets.EMAIL }}
-          GOOGLE_APP_PASSWORD: ${{ secrets.GOOGLE_APP_PASSWORD }}
-          PADEL_USERNAME: ${{ secrets.PADEL_USERNAME }}
-          PADEL_PASSWORD: ${{ secrets.PADEL_PASSWORD }}
-          PADEL_PHONE: ${{ secrets.PADEL_PHONE }}
+          PADELCONNECT_EMAIL: ${{ secrets.PADELCONNECT_EMAIL }}
+          PADELCONNECT_PASSWORD: ${{ secrets.PADELCONNECT_PASSWORD }}
+          TARGET_VENUE: ${{ secrets.TARGET_VENUE }}
+          TARGET_COURT: ${{ secrets.TARGET_COURT }}
+          TARGET_START: ${{ secrets.TARGET_START }}
+          TARGET_END: ${{ secrets.TARGET_END }}
+          TIMEZONE: ${{ secrets.TIMEZONE }}
+          LEAD_DAYS: ${{ secrets.LEAD_DAYS }}
+          FALLBACK_ENABLE: ${{ secrets.FALLBACK_ENABLE }}
+          FALLBACK_WINDOWS: ${{ secrets.FALLBACK_WINDOWS }}
+          FALLBACK_COURTS: ${{ secrets.FALLBACK_COURTS }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          NOTIFY_TO: ${{ secrets.NOTIFY_TO }}
+
         run: |
           node dist/index.js
