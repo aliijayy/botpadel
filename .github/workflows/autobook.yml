@@ -1,0 +1,34 @@
+name: Auto Padel Booking
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # runs every day at midnight UTC
+  workflow_dispatch:      # allows manual run
+
+jobs:
+  run-booker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          npm install
+          npx playwright install --with-deps
+
+      - name: Run padel auto-booker
+        env:
+          EMAIL: ${{ secrets.EMAIL }}
+          GOOGLE_APP_PASSWORD: ${{ secrets.GOOGLE_APP_PASSWORD }}
+          PADEL_USERNAME: ${{ secrets.PADEL_USERNAME }}
+          PADEL_PASSWORD: ${{ secrets.PADEL_PASSWORD }}
+          PADEL_PHONE: ${{ secrets.PADEL_PHONE }}
+        run: |
+          node dist/index.js
