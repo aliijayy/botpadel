@@ -1,47 +1,55 @@
 name: Nightly Padel Booking
 
 on:
-schedule:
-- cron: '55 22 * * *' # Runs at 23:55 Europe/Zurich = 22:55 UTC (adjust for DST manually or use GH env)
-workflow_dispatch: {}
+  schedule:
+    - cron: '55 22 * * *' # Runs at 23:55 Europe/Zurich = 22:55 UTC (adjust for DST manually or use GH env)
+  workflow_dispatch: {}
 
 jobs:
-run:
-runs-on: ubuntu-latest
-permissions:
-contents: read
-env:
-TZ: Europe/Zurich
-steps:
-- uses: actions/checkout@v4
-- uses: pnpm/action-setup@v4
-with: { version: 9 }
-- uses: actions/setup-node@v4
-with: { node-version: '20', cache: 'pnpm' }
-- name: Install Playwright deps
-run: |
-pnpm install
-npx playwright install --with-deps
-- name: Create .env
-run: |
-echo "PADELCONNECT_EMAIL=${{ secrets.PADELCONNECT_EMAIL }}" >> .env
-echo "PADELCONNECT_PASSWORD=${{ secrets.PADELCONNECT_PASSWORD }}" >> .env
-echo "TARGET_VENUE=TC INTERNATIONAL CHAMBÉSY" >> .env
-echo "TARGET_COURT=Court 2" >> .env
-echo "TARGET_START=19:30" >> .env
-echo "TARGET_END=21:00" >> .env
-echo "TIMEZONE=Europe/Zurich" >> .env
-echo "LEAD_DAYS=14" >> .env
-echo "FALLBACK_ENABLE=true" >> .env
-echo "FALLBACK_WINDOWS=19:00–20:30|20:00–21:30" >> .env
-echo "FALLBACK_COURTS=Court 1|Any" >> .env
-echo "NOTIFY_CHANNEL=email" >> .env
-echo "NOTIFY_TO=${{ secrets.NOTIFY_TO }}" >> .env
-echo "SMTP_HOST=${{ secrets.SMTP_HOST }}" >> .env
-echo "SMTP_PORT=${{ secrets.SMTP_PORT }}" >> .env
-echo "SMTP_USER=${{ secrets.SMTP_USER }}" >> .env
-echo "SMTP_PASS=${{ secrets.SMTP_PASS }}" >> .env
-echo "DRY_RUN=false" >> .env
-echo "LOG_LEVEL=info" >> .env
-- name: Run scheduler
-run: pnpm schedule
+  run:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      TZ: Europe/Zurich
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Playwright deps
+        run: |
+          pnpm install
+          npx playwright install --with-deps
+
+      - name: Create .env
+        run: |
+          echo "PADELCONNECT_EMAIL=${{ secrets.PADELCONNECT_EMAIL }}" >> .env
+          echo "PADELCONNECT_PASSWORD=${{ secrets.PADELCONNECT_PASSWORD }}" >> .env
+          echo "TARGET_VENUE=TC INTERNATIONAL CHAMBÉSY" >> .env
+          echo "TARGET_COURT=Court 2" >> .env
+          echo "TARGET_START=19:30" >> .env
+          echo "TARGET_END=21:00" >> .env
+          echo "TIMEZONE=Europe/Zurich" >> .env
+          echo "LEAD_DAYS=14" >> .env
+          echo "FALLBACK_ENABLE=true" >> .env
+          echo "FALLBACK_WINDOWS=19:00–20:30|20:00–21:30" >> .env
+          echo "FALLBACK_COURTS=Court 1|Any" >> .env
+          echo "NOTIFY_CHANNEL=email" >> .env
+          echo "NOTIFY_TO=${{ secrets.NOTIFY_TO }}" >> .env
+          echo "SMTP_HOST=${{ secrets.SMTP_HOST }}" >> .env
+          echo "SMTP_PORT=${{ secrets.SMTP_PORT }}" >> .env
+          echo "SMTP_USER=${{ secrets.SMTP_USER }}" >> .env
+          echo "SMTP_PASS=${{ secrets.SMTP_PASS }}" >> .env
+          echo "DRY_RUN=false" >> .env
+          echo "LOG_LEVEL=info" >> .env
+
+      - name: Run scheduler
+        run: pnpm schedule
