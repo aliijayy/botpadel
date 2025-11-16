@@ -21,9 +21,12 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-          npx playwright install --with-deps
+  
       - name: Install Playwright browsers
-        run: npx playwright install chromium --with-deps
+        run:  |
+          npx playwright install --with-deps
+          npx playwright install chromium
+
 
       - name: Run padel auto-booker
         env:
@@ -43,6 +46,5 @@ jobs:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           NOTIFY_TO: ${{ secrets.NOTIFY_TO }}
-
         run: |
           node dist/index.js
